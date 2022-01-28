@@ -8,28 +8,53 @@
     <button v-for="item in sports" :key="item" @click="onSelectSport(item)">{{ item }}</button>
     <div>你选择的运动：{{ selectedSport }}</div>
   </div>
+  <div>
+    <button @click="overAction"> 点击 </button>
+    <div>{{ overText }}</div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import {
+  ref,
+  reactive,
+  toRefs,
+  onMounted,
+  onBeforeMount,
+  onBeforeUpdate,
+  onUpdated,
+  watch,
+} from "vue";
 
-export default defineComponent({
-  name: 'App',
-  setup(){
-    const sports = ref(['举铁', '有氧'])
-    const selectedSport = ref('')
-    const onSelectSport = (sports)=>{
-      selectedSport.value = sports
-      console.log(selectedSport.value);
+export default {
+  name: "App",
+  setup() {
+    interface DataProps {
+      sports: string[];
+      selectedSport: string;
+      onSelectSport: (index: string) => void;
     }
+    const data: DataProps = reactive({
+      sports: ["举铁", "有氧"],
+      selectedSport: "",
+      onSelectSport: (sports: string) => {
+        data.selectedSport = sports;
+      },
+    });
 
-    return { 
-      sports,
-      selectedSport,
-      onSelectSport
-    }
-  }
-});
+    const refData = toRefs(data);
+
+    const overText = ref("红浪漫");
+    const overAction = () => {
+      overText.value = overText.value + "1 |";
+    };
+    watch(overText, (newVal, oldVal)=>{
+      document.title = overText.value;
+    })
+
+    return { ...refData, overText, overAction };
+  },
+};
 </script>
 
 <style>
