@@ -1,16 +1,33 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div>
+    <h2>11</h2>
+    <div>22</div>
+  </div>
+  <div>
+    <button v-for="item in sports" :key="item" @click="onSelectSport(item)">{{ item }}</button>
+    <div>你选择的运动：{{ selectedSport }}</div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'App',
-  components: {
-    HelloWorld
+  setup(){
+    const sports = ref(['举铁', '有氧'])
+    const selectedSport = ref('')
+    const onSelectSport = (sports)=>{
+      selectedSport.value = sports
+      console.log(selectedSport.value);
+    }
+
+    return { 
+      sports,
+      selectedSport,
+      onSelectSport
+    }
   }
 });
 </script>
